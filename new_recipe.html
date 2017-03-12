@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Recipe Assistant</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="assets/css/style.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        var theUrl = "https://lztxcr6zu1.execute-api.us-east-1.amazonaws.com/prod/RecipeUpdate?TableName=Recipes";
+        $("#putButton").click(function(){
+            console.log("hi");
+            $.post(theUrl, JSON.stringify({
+                  "type": "POST", 
+                  "data": {
+                      "TableName": "Recipes",
+                      //New item information to be posted 
+                      "Item": {
+                          "RecipeName":"Test", 
+                          "Ingredients": "2015",
+                          "Directions": "do this"}}}), 
+              function(data, status){
+              alert(status);
+            })
+          });
+      });
+      
+  
+    </script>
+  </head>
+  <body>
+  <h1>Add Recipe Form</h1>
+      <form >
+        <fieldset>
+          <legend>Add a recipe</legend>
+          <p>
+            <label>Recipe Name</label>
+            <input type = "text"
+                   id = "recipeName" />
+          </p>
+          <p>
+            <label>Ingredients</label>
+            <textarea
+                   id = "ingredients"></textarea>
+          </p>
+          <p>
+            <label>Preperation Steps</label>
+            <textarea
+                   id = "directions"></textarea>
+          </p>
+         <p>
+            <label>Image Upload</label>
+            <input type = "text"
+                   id = "imageUpload" />
+          </p>
+        </fieldset>
+      </form>
+      <button id = "putButton">Test</button>
+  </body>
+</html>
