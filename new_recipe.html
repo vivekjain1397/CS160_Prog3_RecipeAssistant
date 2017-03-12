@@ -8,8 +8,21 @@
     <script>
       $(document).ready(function() {
         var theUrl = "https://lztxcr6zu1.execute-api.us-east-1.amazonaws.com/prod/RecipeUpdate?TableName=Recipes";
+        var r = $('body').find("#recipeName").val();
+        var ing = $('body').find("#ingredients").val();
+        var d = $('body').find("#directions").val();
+        var i = $('body').find("#imageUpload").val();
         $("#putButton").click(function(){
+          var o = {"type": "POST", "data": {"TableName": "Recipes", "Item":[]}};
+          var obj = {
+            "RecipeName": r,
+            "Ingredients": ing,
+            "Directions": d,
+            "Image": i
+          };
+          o.data.Item.push(obj); 
             console.log("hi");
+            // $.post(theUrl, JSON.stringify(o)),
             $.post(theUrl, JSON.stringify({
                   "type": "POST", 
                   "data": {
@@ -20,9 +33,9 @@
                           "Ingredients": "2015",
                           "Directions": "do this"}}}), 
               function(data, status){
-              alert(status);
-            })
-          });
+                alert(status);
+              })
+        });
       });
       
   
@@ -44,7 +57,7 @@
                    id = "ingredients"></textarea>
           </p>
           <p>
-            <label>Preperation Steps</label>
+            <label>Preparation Steps</label>
             <textarea
                    id = "directions"></textarea>
           </p>
