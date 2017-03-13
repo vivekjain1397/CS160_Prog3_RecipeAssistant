@@ -8,33 +8,25 @@
     <script>
       $(document).ready(function() {
         var theUrl = "https://lztxcr6zu1.execute-api.us-east-1.amazonaws.com/prod/RecipeUpdate?TableName=Recipes";
-        var r = $('body').find("#recipeName").val();
-        var ing = $('body').find("#ingredients").val();
-        var d = $('body').find("#directions").val();
-        var i = $('body').find("#imageUpload").val();
         $("#putButton").click(function(){
-          var o = {"type": "POST", "data": {"TableName": "Recipes", "Item":[]}};
+          var r = $('body').find("#recipeName").val();
+          var ing = $('body').find("#ingredients").val();
+          var d = $('body').find("#directions").val();
+          var i = $('body').find("#imageUpload").val();
           var obj = {
             "RecipeName": r,
             "Ingredients": ing,
             "Directions": d,
             "Image": i
           };
-          o.data.Item.push(obj); 
+          var o = {"type": "POST", "data": {"TableName": "Recipes", "Item": obj}};
+          console.log(obj);
+          // o.data.Item.push(obj); 
+          console.log(o);
             console.log("hi");
-            // $.post(theUrl, JSON.stringify(o)),
-            $.post(theUrl, JSON.stringify({
-                  "type": "POST", 
-                  "data": {
-                      "TableName": "Recipes",
-                      //New item information to be posted 
-                      "Item": {
-                          "RecipeName":"Test", 
-                          "Ingredients": "2015",
-                          "Directions": "do this"}}}), 
-              function(data, status){
-                alert(status);
-              })
+            $.post(theUrl, JSON.stringify(o), function(data, status) {
+              alert(status);
+            });
         });
       });
       
