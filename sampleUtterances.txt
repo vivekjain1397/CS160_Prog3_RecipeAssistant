@@ -29,5 +29,3 @@ StartAgainIntent start again
 
 readDirectionsIntent start
 readDirectionsIntent read recipe
-
-

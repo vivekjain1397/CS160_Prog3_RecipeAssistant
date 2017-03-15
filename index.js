@@ -188,7 +188,7 @@ var newSessionHandlers = {
  	};
 
  	//this intent handles stepping through the directions one by one
- 	'NextIngredientIntent': function(){
+ 	'NextDirectionIntent': function(){
  		var currentRecipe = this.attributes['currentRecipe'];
  		var currentDirIndex = this.attributes['currentDirectionsIndex'];
  		var directionsList = [];
