@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--<link rel="icon" href="favicon.ico">-->
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Recipe Assistant</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- My Styles-->
+    <link href="./css/style.css" rel="stylesheet">
+
+</head>
+
+
+<body>
+    <!--Main Navigation Bar-->
+    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+        <a class="navbar-brand" href="#">Recipe Assistant</a>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="./index.html">Home  </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="./myRecipes.html">My Recipies  </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="./addRecipe.html">Add a Recipe  </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="./settings.html">Settings  </a>
+                </li>
+            </ul>
+            <form class="form-inline mt-2 mt-md-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search Recipes">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <!--Recipe Nav-->
+    <div class="direction-list" style="text-align: center;">
+        <!--when ingrediant button is clicked, update the the direction list to show the Ingrediants-->
+        <input class="btn btn-default btn-lg" style="width: auto;" type="button" value="Ingrediants">
+
+        <!--when direction button in pressed, update the direction list to show the direction steps-->
+        <input class="btn btn-default btn-lg" style="width: auto;" type="button" value="Directions">
+    </div>
+
+    <!--Recipe Nav-->
+    <!--On button (above) click populate the main container with either a ingrediant list or a direction list-->
+    <!--the example shows directions but could just as easily be ingrediants-->
+
+    <!--example direction styling-->
+    <ul class="list-group direction-list">
+        <!--for each step in the set of directions add new direction-step to direction-list-->
+        <li class="list-group-item">Soak rice noodles in cold water 30 to 50 minutes, or until soft. Drain, and set aside</li>
+        <li class="list-group-item">Heat butter in a wok or large heavy skillet. Saute chicken until browned. Remove, and set aside</li>
+        <li class="list-group-item">Heat oil in wok over medium-high heat. Crack eggs into hot oil, and cook until firm.</li>
+        <li class="list-group-item">Stir in chicken, and cook for 5 minutes.</li>
+        <li class="list-group-item">Add softened noodles, and vinegar, fish sauce, sugar and red pepper.</li>
+        <li class="list-group-item">Adjust seasonings to taste. Mix while cooking, until noodles are tender. </li>
+        <li class="list-group-item">Add bean sprouts, and mix for 3 minutes.</li>
+    </ul>
+
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+    <script>
+        window.jQuery || document.write('<script src="./jquery.min.js"><\/script>')
+    </script>
+
+    <script src="./js/tether.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+
+</body>
+
+</html>

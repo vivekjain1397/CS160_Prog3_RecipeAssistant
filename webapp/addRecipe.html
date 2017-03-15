@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--<link rel="icon" href="favicon.ico">-->
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Recipe Assistant</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- My Styles-->
+    <link href="./css/style.css" rel="stylesheet">
+
+</head>
+
+
+<body>
+    <!--Main Navigation Bar-->
+    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+            aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+        <a class="navbar-brand" href="#">Recipe Assistant</a>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="./index.html">Home  </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="./myRecipes.html">My Recipies  </a>
+                </li>
+
+                <li class="nav-item active">
+                    <a class="nav-link" href="./addRecipe.html">Add a Recipe  <span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="./settings.html">Settings  </a>
+                </li>
+            </ul>
+            <form class="form-inline mt-2 mt-md-0">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search Recipes">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
+        </div>
+    </nav>
+
+    <!--Main Container-->
+    <form class="form-horizontal recipe-form">
+        <!--Recipe name-->
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Recipe Name</label>
+            <div class="col-sm-12">
+                <input class="form-control" type="text" id="recipeName" placeholder="Recipe Name" />
+            </div>
+        </div>
+        <!--Ingredients-->
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Ingredients</label>
+            <div class="col-sm-12">
+                <textarea class="form-control" style="height: 200px;" id="ingredients" placeholder="Enter each ingredient on a new line"></textarea>
+            </div>
+        </div>
+        <!--Preperation Steps-->
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Preparation Steps</label>
+            <div class="col-sm-12">
+                <textarea class="form-control" style="height: 300px;" id="directions" placeholder="Enter each step on a new line"></textarea>
+            </div>
+        </div>
+        <!--image upload-->
+        <div class="form-group">
+            <label class="col-sm-4 control-label">Image Upload</label>
+            <div class="col-sm-12">
+                <input class="form-control" type="text" id="imageUpload" placeholder="URL of image" />
+            </div>
+        </div>
+        <button class="btn btn-default" id="putButton">Submit</button>
+    </form>
+
+
+
+    <!--Amazon DB script-->
+    <script>
+        $(document).ready(function () {
+            var theUrl = "https://lztxcr6zu1.execute-api.us-east-1.amazonaws.com/prod/RecipeUpdate?TableName=Recipes";
+            $("#putButton").click(function () {
+                var r = $('body').find("#recipeName").val();
+                var ing = $('body').find("#ingredients").val();
+                var d = $('body').find("#directions").val();
+                var i = $('body').find("#imageUpload").val();
+                var obj = {
+                    "RecipeName": r,
+                    "Ingredients": ing,
+                    "Directions": d,
+                    "Image": i
+                };
+                var o = { "type": "POST", "data": { "TableName": "Recipes", "Item": obj } };
+                console.log(obj);
+                // o.data.Item.push(obj);
+                console.log(o);
+                console.log("hi");
+                $.post(theUrl, JSON.stringify(o), function (data, status) {
+                    alert(status);
+                });
+            });
+        });
+    </script>
+
+    <!--Bootstrap-->
+    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+        crossorigin="anonymous"></script>
+    <script>
+        window.jQuery || document.write('<script src="./jquery.min.js"><\/script>')
+    </script>
+
+    <script src="./js/tether.min.js"></script>
+    <script src="./js/bootstrap.min.js"></script>
+
+</body>
+
+</html>
