@@ -1,0 +1,33 @@
+MakeIntent i'd like to {act} {firstWord}
+MakeIntent i'd like to {act} {firstWord} {secondWord}
+MakeIntent i'd like to {act} {firstWord} {secondWord} {thirdWord}
+MakeIntent i'd like to {act} {firstWord} {secondWord} {thirdWord} {fourthWord}
+MakeIntent i'd like to {act} {firstWord} {secondWord} {thirdWord} {fourthWord} {fifthWord}
+MakeIntent i'd like to {act} {firstWord} {secondWord} {thirdWord} {fourthWord} {fifthWord} {sixthWord}
+MakeIntent i'd like to {act} {firstWord} {secondWord} {thirdWord} {fourthWord} {fifthWord} {sixthWord} {seventhWord}
+
+MakeIntent {act} {firstWord}
+MakeIntent {act} {firstWord} {secondWord}
+MakeIntent {act} {firstWord} {secondWord} {thirdWord}
+MakeIntent {act} {firstWord} {secondWord} {thirdWord} {fourthWord}
+MakeIntent {act} {firstWord} {secondWord} {thirdWord} {fourthWord} {fifthWord}
+MakeIntent {act} {firstWord} {secondWord} {thirdWord} {fourthWord} {fifthWord} {sixthWord}
+MakeIntent {act} {firstWord} {secondWord} {thirdWord} {fourthWord} {fifthWord} {sixthWord} {seventhWord}
+
+RecipeIntent ingredients
+RecipeIntent what are the ingredients
+
+QuitIntent main menu
+QuitIntent quit
+QuitIntent exit
+
+NextIngredientIntent {nextOrLast} ingredient
+
+NextDirectionIntent {command} step
+
+StartAgainIntent start again
+
+readDirectionsIntent start
+readDirectionsIntent read recipe
+
+
