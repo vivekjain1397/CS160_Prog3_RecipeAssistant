@@ -39,3 +39,72 @@ body {
 .recipe img {
   display: inline-block;
 }
+
+body {
+  min-height: 85rem;
+  padding-top: 4.5rem;
+}
+
+.btn-outline-success:hover {
+  background-color: rgb(30, 150, 250);
+  border-color: rgb(30, 150, 250);
+}
+
+.btn-outline-success {
+  color: rgb(30, 150, 250);
+  border-color: rgb(30, 150, 250);
+}
+
+.nav-link {
+  padding-left: 2rem;
+  padding-right: 2rem;
+}
+
+a.navbar-brand {
+  font-size: 1.5rem;
+}
+
+a.nav-link.disabled {
+  padding-right: 2.0rem;
+  padding-left: 2.0rem;
+}
+
+.recipe-list {
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.recipe-form {
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.direction-list {
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.direction-nav {
+  text-align: center;
+}
+
+/*.recipe-list-item {
+  height: 150px;
+}*/
+
+.recipe-image {
+  width: 150px;
+  height:auto;
+}
+
+.recipe-icon {
+  width: 40px;
+  margin: 0 10px;
+}
+
+.recipe-name {
+  margin: auto;
+  vertical-align: middle;
+}

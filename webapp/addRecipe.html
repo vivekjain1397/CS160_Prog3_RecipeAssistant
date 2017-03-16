@@ -1,25 +1,19 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
+<html>
+  <head>
+    
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!--<link rel="icon" href="favicon.ico">-->
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
     <title>Recipe Assistant</title>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
 
+    <!-- BOOTSTRAP -->
     <!-- Bootstrap core CSS -->
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- My Styles-->
-    <link href="./css/style.css" rel="stylesheet">
-
-</head>
-
-
-<body>
+  </head>
+  <body>
     <!--Main Navigation Bar-->
     <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
@@ -34,7 +28,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="./myRecipes.html">My Recipies  </a>
+                    <a class="nav-link" href="./myRecipes.html">My Recipes  </a>
                 </li>
 
                 <li class="nav-item active">
@@ -82,48 +76,42 @@
                 <input class="form-control" type="text" id="imageUpload" placeholder="URL of image" />
             </div>
         </div>
-        <button class="btn btn-default" id="putButton">Submit</button>
+        <div id="putButton">Submit</div>
     </form>
-
-
-
-    <!--Amazon DB script-->
-    <script>
-        $(document).ready(function () {
-            var theUrl = "https://lztxcr6zu1.execute-api.us-east-1.amazonaws.com/prod/RecipeUpdate?TableName=Recipes";
-            $("#putButton").click(function () {
-                var r = $('body').find("#recipeName").val();
-                var ing = $('body').find("#ingredients").val();
-                var d = $('body').find("#directions").val();
-                var i = $('body').find("#imageUpload").val();
-                var obj = {
-                    "RecipeName": r,
-                    "Ingredients": ing,
-                    "Directions": d,
-                    "Image": i
-                };
-                var o = { "type": "POST", "data": { "TableName": "Recipes", "Item": obj } };
-                console.log(obj);
-                // o.data.Item.push(obj);
-                console.log(o);
-                console.log("hi");
-                $.post(theUrl, JSON.stringify(o), function (data, status) {
-                    alert(status);
-                });
-            });
-        });
-    </script>
-
-    <!--Bootstrap-->
+  
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
         crossorigin="anonymous"></script>
-    <script>
-        window.jQuery || document.write('<script src="./jquery.min.js"><\/script>')
-    </script>
-
     <script src="./js/tether.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
 
-</body>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+      $(document).ready(function() {
+        var theUrl = "https://lztxcr6zu1.execute-api.us-east-1.amazonaws.com/prod/RecipeUpdate?TableName=Recipes";
+        var c;
+        $.get(theUrl, function(data, status){
+          c = data.Count.toString();
+        });
+        $("#putButton").click(function(){
+          var r = $('body').find("#recipeName").val();
+          var ing = $('body').find("#ingredients").val();
+          var d = $('body').find("#directions").val();
+          var i = $('body').find("#imageUpload").val();
+          var obj = {
+            "RecipeName": r,
+            "Ingredients": ing,
+            "Directions": d,
+            "Image": i,
+            "Count": c
+          };
+          var o = {"type": "POST", "data": {"TableName": "Recipes", "Item": obj}};
+          $.post(theUrl, JSON.stringify(o), function(data, status) {
+            alert(status);  
+            location.reload(); 
+          });
+        });
+      });
+    </script>
 
+  </body>
 </html>

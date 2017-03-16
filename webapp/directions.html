@@ -30,15 +30,15 @@
         <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="./index.html">Home  </a>
+                    <a class="nav-link" href="index.html">Home  </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="./myRecipes.html">My Recipies  </a>
+                    <a class="nav-link" href="myRecipes.html">My Recipes  </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="./addRecipe.html">Add a Recipe  </a>
+                    <a class="nav-link" href="addRecipe.html">Add a Recipe  </a>
                 </li>
 
                 <li class="nav-item">
@@ -51,31 +51,7 @@
             </form>
         </div>
     </nav>
-
-    <!--Recipe Nav-->
-    <div class="direction-list" style="text-align: center;">
-        <!--when ingrediant button is clicked, update the the direction list to show the Ingrediants-->
-        <input class="btn btn-default btn-lg" style="width: auto;" type="button" value="Ingrediants">
-
-        <!--when direction button in pressed, update the direction list to show the direction steps-->
-        <input class="btn btn-default btn-lg" style="width: auto;" type="button" value="Directions">
-    </div>
-
-    <!--Recipe Nav-->
-    <!--On button (above) click populate the main container with either a ingrediant list or a direction list-->
-    <!--the example shows directions but could just as easily be ingrediants-->
-
-    <!--example direction styling-->
-    <ul class="list-group direction-list">
-        <!--for each step in the set of directions add new direction-step to direction-list-->
-        <li class="list-group-item">Soak rice noodles in cold water 30 to 50 minutes, or until soft. Drain, and set aside</li>
-        <li class="list-group-item">Heat butter in a wok or large heavy skillet. Saute chicken until browned. Remove, and set aside</li>
-        <li class="list-group-item">Heat oil in wok over medium-high heat. Crack eggs into hot oil, and cook until firm.</li>
-        <li class="list-group-item">Stir in chicken, and cook for 5 minutes.</li>
-        <li class="list-group-item">Add softened noodles, and vinegar, fish sauce, sugar and red pepper.</li>
-        <li class="list-group-item">Adjust seasonings to taste. Mix while cooking, until noodles are tender. </li>
-        <li class="list-group-item">Add bean sprouts, and mix for 3 minutes.</li>
-    </ul>
+    <div class="all-directions"></div>
 
     <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
         crossorigin="anonymous"></script>
@@ -85,6 +61,9 @@
 
     <script src="./js/tether.min.js"></script>
     <script src="./js/bootstrap.min.js"></script>
+    
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="js/directions.js"></script>
 
 </body>
 

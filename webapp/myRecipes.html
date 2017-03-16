@@ -2,99 +2,105 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!--<link rel="icon" href="favicon.ico">-->
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>Recipe Assistant</title>
+  <!--<link rel="icon" href="favicon.ico">-->
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <title>Recipe Assistant</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap core CSS -->
+  <link href="./css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- My Styles-->
-    <link href="./css/style.css" rel="stylesheet">
-
+  <!-- My Styles-->
+  <link href="./css/style.css" rel="stylesheet">
 </head>
 
 
 <body>
-    <!--Main Navigation Bar-->
-    <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
-            aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-        </button>
+  <!--Main Navigation Bar-->
+  <nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+    <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+        aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <a class="navbar-brand" href="#">Recipe Assistant</a>
-        <div class="collapse navbar-collapse" id="navbarCollapse">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="./index.html">Home  </a>
-                </li>
+    <a class="navbar-brand" href="#">Recipe Assistant</a>
+    <div class="collapse navbar-collapse" id="navbarCollapse">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+            <a class="nav-link" href="./index.html">Home  </a>
+        </li>
 
-                <li class="nav-item active">
-                    <a class="nav-link" href="./myRecipes.html">My Recipies  <span class="sr-only">(current)</span></a>
-                </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="./myRecipes.html">My Recipes  <span class="sr-only">(current)</span></a>
+        </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="./addRecipe.html">Add a Recipe  </a>
-                </li>
+        <li class="nav-item">
+            <a class="nav-link" href="./addRecipe.html">Add a Recipe  </a>
+        </li>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="./settings.html">Settings  </a>
-                </li>
-            </ul>
-            <form class="form-inline mt-2 mt-md-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search Recipes">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
+        <li class="nav-item">
+            <a class="nav-link" href="./settings.html">Settings  </a>
+        </li>
+      </ul>
+      <form class="form-inline mt-2 mt-md-0">
+        <input class="form-control mr-sm-2" type="text" placeholder="Search Recipes">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    </div>
+  </nav>
 
-    <!--Main List Container-->
-    <div class="recipe-list list-group">
-
-
-        <!--Basic List Item Template-->
-        <!--TODO: write a jquery that populates recipe-list div with the following list items-->
-        <div class="media recipe-list-item list-group-item container">
-            <div class="media-left">
-                <a href="./directions.html">
-                    <img class="media-object recipe-image img-responsive" src="./img/test/kabab.jpg" alt="">
-                </a>
-            </div>
-            <div class="media-body container">
-                <h1 class="media-heading recipe-name">Mom's Beef Shish Kabobs</h1>
-                <p class="recipe-description">Get out there and fire up the grill for pork kabobs, a tasty alternative to chicken and beef. These sweet
-                    and gingery beauties make dinnertime happy.</p>
-            </div>
-        </div>
-
-        <!--second item in list-->
-        <div class="media recipe-list-item list-group-item container">
-            <div class="media-left">
-                <a href="./directions.html">
-                    <img class="media-object recipe-image img-responsive" src="./img/test/padthai.jpg" alt="">
-                </a>
-            </div>
-            <div class="media-body container">
-                <h1 class="media-heading recipe-name">Easy Pad Thai Recipe</h1>
-                <p>This is a traditional Pad Thai recipe used by a friend's mother. It has a sauce of fish sauce, sugar, vinegar
-                    and red pepper. Read more details and learn how to make it in just few steps!</p>
-            </div>
-        </div>
+  <!--Main List Container-->
+  <div class="recipe-list list-group">
+    <!--Basic List Item Template-->
+    <!--TODO: write a jquery that populates recipe-list div with the following list items-->
+    <div class="media recipe-list-item list-group-item container">
+      <div class="media-left">
+          <img class="media-object recipe-image img-responsive" src="./img/test/kabab.jpg" alt="">
+      </div>
+      <div class="media-body container">
+        <h3 class="media-heading recipe-name">Mom's Beef Shish Kabobs</h3>
+        <!-- <p class="recipe-description">Get out there and fire up the grill for pork kabobs, a tasty alternative to chicken and beef. These sweet
+            and gingery beauties make dinnertime happy.</p> -->
+      </div>
+      <div class="media-right">
+        <img class="media-object recipe-icon img-responsive directions-icon" id="" src="img/directions.png" alt="">
+        <img class="media-object recipe-icon img-responsive ingredients-icon" id="" src="img/ingredients.png" alt="">
+      </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
-        crossorigin="anonymous"></script>
-    <script>
-        window.jQuery || document.write('<script src="./jquery.min.js"><\/script>')
-    </script>
+    <!--second item in list-->
+    <div class="media recipe-list-item list-group-item container">
+        <div class="media-left">
+            <a href="./directions.html">
+                <img class="media-object recipe-image img-responsive" src="./img/test/padthai.jpg" alt="">
+            </a>
+        </div>
+        <div class="media-body container">
+            <h3 class="media-heading recipe-name">Easy Pad Thai Recipe</h3>
+            <!-- <p>This is a traditional Pad Thai recipe used by a friend's mother. It has a sauce of fish sauce, sugar, vinegar
+                and red pepper. Read more details and learn how to make it in just few steps!</p> -->
+        </div>
+        <div class="media-right">
+          <img class="media-object recipe-icon img-responsive" src="img/directions.png" alt="">
+          <img class="media-object recipe-icon img-responsive" src="img/ingredients.png" alt="">
+        </div>
+    </div>
+  </div>
 
-    <script src="./js/tether.min.js"></script>
-    <script src="./js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js" integrity="sha384-A7FZj7v+d/sdmMqp/nOQwliLvUsJfDHW+k9Omg/a/EheAdgtzNs3hpfag6Ed950n"
+      crossorigin="anonymous"></script>
+  <script>
+      window.jQuery || document.write('<script src="./jquery.min.js"><\/script>')
+  </script>
+
+  <script src="./js/tether.min.js"></script>
+  <script src="./js/bootstrap.min.js"></script>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="js/update.js"></script>
 
 </body>
 
