@@ -4,36 +4,8 @@
       "intent": "MakeIntent",
       "slots": [
         {
-          "name": "act",
-          "type": "FIND_OR_MAKE"
-        },
-        {
-          "name": "firstWord",
-          "type": "LIST_OF_RECIPE_WORDS"
-        },
-        {
-          "name": "secondWord",
-          "type": "LIST_OF_RECIPE_WORDS"
-        },
-        {
-          "name": "thirdWord",
-          "type": "LIST_OF_RECIPE_WORDS"
-        },
-        {
-          "name": "fourthWord",
-          "type": "LIST_OF_RECIPE_WORDS"
-        },
-        {
-          "name": "fifthWord",
-          "type": "LIST_OF_RECIPE_WORDS"
-        },
-        {
-          "name": "sixthWord",
-          "type": "LIST_OF_RECIPE_WORDS"
-        },
-        {
-          "name": "seventhWord",
-          "type": "LIST_OF_RECIPE_WORDS"
+          "name": "recipe",
+          "type": "AMAZON.LITERAL"
         }
       ]
     },
@@ -44,11 +16,14 @@
       "intent": "QuitIntent"
     },
     {
+      "intent": "WhatCanISayIntent"
+    },
+    {
       "intent": "NextIngredientIntent",
       "slots": [
         {
           "name": "nextOrLast",
-          "type": "NEXT_OR_LAST"
+          "type": "NEXT_LAST"
         }
       ]
     },
@@ -57,7 +32,7 @@
       "slots": [
         {
           "name": "command",
-          "type": "NEXT_OR_LAST"
+          "type": "NEXT_LAST"
         }
       ]
     },

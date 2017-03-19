@@ -58,25 +58,14 @@ exports.handler = (event, context, callback) => {
 
         var alexa = Alexa.handler(event, context);
         // alexa.dynamoDBTableName = 'Recipes';
-        alexa.registerHandlers(newSessionHandlers, mainMenuHandlers, recipeModeHandlers);
-            // , directionsHandlers);
         alexa.appid = 'amzn1.ask.skill.0f0b54a5-a07c-4af0-8644-783c640f7afb';
+        alexa.registerHandlers(handlers);
+            // , directionsHandlers);
         alexa.execute();
     }
 
 };
 
-
-
-
-
-
-
-
-
-// exports.handler = function(event, context, callback){
-    
-// };
 
 //helper functions and private variables
 var states = {
@@ -85,221 +74,250 @@ var states = {
     DIRECTIONSDIALOGUE: '_DIRECTIONSMODE'
 };
 
-// var getRecipeFromIntent = function(intent){
-    
-//     return recipeName;
-// };
+var helpers = {
 
-//this function implements reading from the DynamoDB– it is set up with my db right now
-// var dynamodb = new AWS.DynamoDB({endpoint: 'https://doitqrtbx7.execute-api.us-east-1.amazonaws.com/prod/RecipeUpdate'});
+    currentDialog: null,
+    currentIngredientIndex: 0,
+    currentDirectionsIndex: 0,
 
-// var EntryService = function(){
-//     this.dynamodb = new AWS.DynamoDB({endpoint: 'https://doitqrtbx7.execute-api.us-east-1.amazonaws.com/prod/RecipeUpdate'});
+    currentRecipeItem: null,
 
-// };
+    read: function(name, alexasdk) {
 
-var read = function(name, alexasdk){
-    // var params = {
-    //     TableName : 'Recipes',
-    //     Key: {
-    //         RecipeName: {S: name}
-    //     }
-    // };
+        var cb = function(err, res){
+            if (res){
+                var items = res.Items;
+                for (var i=0; i<items.length; i++){
+                    var item = items[i];
+                    if (item.RecipeName === name){
+                        helpers.currentRecipeItem = item;
+                        helpers.currentDialog = states.RECIPEDIALOGUE;
+                        alexasdk.emit(":tell", "Okay! I found a recipe for " + name + ".");
+                    }
+                }
+                //no recipe found
+                alexasdk.emit(":tell", "I'm sorry. I don't know that recipe.", "Add a recipe for " + name + " or say a different recipe.");
 
-    // console.log(params);
-    // console.log(dynamo);
-
-    var cb = function(err, res){
-
-        var items = res.Items
-
-        for (var i=0; i<items.length; i++){
-            var item = items[i];
-
-            if (item.RecipeName === name){
-
-                alexasdk.attributes.currentRecipeItem = item;
-                alexasdk.handler.state = states.RECIPEDIALOGUE;
-
-                alexasdk.emit(":tell", "Okay! I found a recipe for " + name + ".");
+            } else {
+                //no recipe table
+                alexasdk.emit(":tell", "You haven't added any recipes yet!", "Add some recipes to get started, then say a recipe you would like to make.");
             }
-        }
-        
+        };
+
+        dynamo.scan({TableName: 'Recipes'}, cb);
     }
-
-    dynamo.scan({TableName: 'Recipes'}, cb);
-
-
-    // var request = new AWS.DynamoDB({region: 'us-east-1', apiVersion: '2012-08-10'}).getItem(params);
-    // // log the name of the image file to load in the slot machine
-    // request.on('success', function(response) {
-    // // logs a value like "cherries.jpg" returned from DynamoDB
-    //     this.attributes.currentDirections = response.data.Item.Directions.S;
-    //     this.attributes.currentIngredients = response.data.Item.Ingredients.S;
-    // });
-    // // submit DynamoDB request
-    // request.send();
-
 };
 
 
-//end helper functions and private variables
-var newSessionHandlers = {
+ var handlers = {
 
-  'NewSession': function() {
+    'LaunchRequest': function() {
 
-    this.attributes.currentIngredientIndex = 0;
-    this.attributes.currentDirectionsIndex = 0;
-    this.attributes.currentRecipeItem = null;
-    this.handler.state = states.MAINMENU;
+        helpers.currentDialog = states.MAINMENU;
 
-    this.emit(':ask', 'Recipe assistant here! What recipe would you like to make?', 'Please say which recipe you would like to make.');
-    
+        this.emit(':ask', 'Recipe assistant here! What recipe would you like to make?', 'Please say which recipe you would like to make.');
 
-    
+    },
 
-   }
-
- };
-
-//handles the main dialogue
- var mainMenuHandlers = Alexa.CreateStateHandler(states.MAINMENU, {
-
-    
-
-
+    'SessionEndedRequest': function(){
+        if (!(helpers.currentDialog === states.MAINMENU)){
+            this.emit('LaunchRequest');
+        }else{
+            this.succeed();
+        }
+    },
 
     'MakeIntent': function () {
-        var action = this.event.request.intent.slots.act.value;
+
         var recipe = this.event.request.intent.slots.recipe.value;
 
-        // this.emit(':tell', recipe);
-        // console.log(recipe);
-        // console.log(action);
-        console.log(this);
 
-        // var cb = function(err, res){
-
-        //     console.log(err);
-        //     console.log(res);
-        //     console.log(this);
-
-        //     'MakeIntent'.emit(res);
-
-        //     // if (res){
-                
-        //     //     currentrecipe = recipe;
-        //     //     ingredients = res.data.Item.Ingredients;
-        //     //     this.attributes.currentDirections = res.data.Item.Directions;
-        //     //     this.handler.state = states.RECIPEDIALOGUE;
-
-        //     //     if (action === 'make'){
-        //     //         this.emit(':tell', 'Okay! Let\'s make ' + recipe +'.');
-        //     //     }
-
-        //     //     if (action === 'find'){
-        //     //         this.emit(':tell', 'I found a recipe for ' + recipe +'.');
-        //     //     }
-
-        //     // } else {
-        //     //     console.log("at else");
-        //     // }
-
-        // };
-
-
-        read(recipe, this);
-
-
-
-        // if (readSuccessful){
-        //     this.attributes.currentRecipe = recipe;
-        //     this.handler.state = states.RECIPEDIALOGUE;
-
-        //     if (action === 'make'){
-        //         this.emit(':tell', 'Okay! Let\'s make ' + recipe +'.');
-        //     }
-
-        //     if (action === 'find'){
-        //         this.emit(':tell', 'I found a recipe for ' + recipe +'.');
-        //     }
-        // } else {
-        //     this.emit( ':tell', 'I\'m sorry. I don\'t know that recipe.', 'Please enter the recipe for ' + recipe + '.' );
-        // }
+        helpers.read(recipe, this);
          
-    }
+    },
 
- });
-
-//handles the recipe dialogue
- var recipeModeHandlers = Alexa.CreateStateHandler(states.RECIPEDIALOGUE, {
-
-    //this intent handles reading the entire list of ingredients, and then entering the directions dialogue
     'RecipeIntent': function(){
-        var ingredients = this.attributes.currentRecipeItem.Ingredients;
+        console.log(helpers.currentRecipeItem);
+
+        var ingredients = helpers.currentRecipeItem.Ingredients;
 
 
         //enter directions dialogue after reading ingredients
-        this.handler.state = states.DIRECTIONSDIALOGUE;
-        this.emit(':tell', 'To make ' + currentRecipe + ', you will need these ingredients.' + ingredients);
+        helpers.currentDialog = states.DIRECTIONSDIALOGUE;
+        this.emit(':tell', 'You will need these ingredients: ' + ingredients +'.');
     },
- 
-    //this intent handles stepping through the ingredients one by one
+
     'NextIngredientIntent': function(){
-        var currentRecipe = this.attributes.currentRecipe;
-        var currentIngIndex = this.attributes.currentIngredientIndex;
-        var ingredientsList = [];
+
+
+
+        var currentIngIndex = helpers.currentIngredientIndex;
+        var ingredientsList = helpers.currentRecipeItem.Ingredients.split('\n');
         var command = this.event.request.intent.slots.nextOrLast.value;
 
-        var cb = function(result){
-            var ingredients = result.Item.Ingredients.S;
-            ingredientsList = ingredients.split('\n');
-        };
-
-        EntryService.prototype.read(currentRecipe, cb);
-
         if (command === 'next'){
-            this.attributes.currentIngredientIndex = currentIngIndex + 1;
+            helpers.currentIngredientIndex = currentIngIndex + 1;
+            
+            //check if this is the end of the list, enter recipe dialog
+            if (helpers.currentIngredientIndex === ingredientsList.length){
+                console.log("made if");
+                helpers.currentDialog = states.DIRECTIONSDIALOGUE;
+            };
+
             this.emit(':tell', ingredientsList[currentIngIndex]);
-        }
-        if (command === 'last'){
-            this.attributes.currentIngredientIndex = ingredientsList.length;
-            this.emit(':tell', ingredientsList[ingredientsList.length - 1]);
+            
+            
         }
 
         //if we have reached the end of the ingredient list, enter the directions dialogue
-        if (this.attributes.currentIngredientIndex === ingredientsList.length){
-            this.handler.state = states.DIRECTIONSDIALOGUE;
+        if (command === 'last'){
+            helpers.currentIngredientIndex = ingredientsList.length;
+            helpers.currentDialog = states.DIRECTIONSDIALOGUE;
+            this.emit(':tell', ingredientsList[ingredientsList.length - 1]);
+            //check if this is the end of the list, enter recipe dialog
         }
 
+        
+
+
+    },
+    'StartAgainIntent': function(){
+        //start again from recipe dialog
+        if (helpers.currentDialog === states.RECIPEDIALOGUE) {
+            var ingredientsList = helpers.currentRecipeItem.Ingredients.split('\n');
+            helpers.currentIngredientIndex = 1;
+            this.emit(':tell', ingredientsList[0]);
+        } else {
+        //start again from directions dialog – extend this logic to start again in different states
+            var directionsList = helpers.currentRecipeItem.Directions.split('\n');
+            helpers.currentDirectionsIndex = 1;
+            this.emit(':tell', directionsList[0]);
+
+        }
     },
 
-    //this intent handles the start again function. Note that this intent has nearly the same behavior in the directions dialogue state
-    'StartAgainIntent': function(){
-        var currentRecipe = this.attributes.currentRecipe;
-        var ingredientsList = [];
-
-        var cb = function(result){
-            var ingredients = result.Item.Ingredients.S;
-            ingredientsList = ingredients.split('\n');
-        };
-
-        EntryService.prototype.read(currentRecipe, cb);
-
-        this.attributes.currentIngredientIndex = 1;
-        this.emit(':tell', ingredientsList[0]);
-
+    'WhatCanISayIntent': function(){
+        this.emit(':tell', "Say I'd like to make, and then the name of a recipe. Or, say find, and then the name of a recipe.");
     },
 
     //handles quitting and returning to the main menu. This intent is also in the directions dialogue state
     'QuitIntent': function(){
-        this.attributes.currentIngredientIndex = 0;
-        this.attributes.currentDirectionsIndex = 0;
-        this.attributes.currentRecipe = '';
-        this.handler.state = states.MAINMENU;
+        helpers.currentIngredientIndex = 0;
+        helpers.currentRecipeItem = null;
+        helpers.currentDialog = states.MAINMENU;
+
+        this.emit(':ask', "What recipe would you like to make?", 'Please say which recipe you would like to make.');
+    },
+
+    'readDirectionsIntent': function(){
+
+        var directions = helpers.currentRecipeItem.Directions;
+
+        this.emit(':tell', directions);
+    },
+
+    'NextDirectionIntent': function(){
+
+        var directionsList = helpers.currentRecipeItem.Directions.split('\n');
+        var currentDirIndex = helpers.currentDirectionsIndex;
+        var command = this.event.request.intent.slots.command.value;
+        
+        if (command === 'next'){
+            helpers.currentDirectionsIndex = currentDirIndex + 1;
+            this.emit(':tell', directionsList[currentDirIndex]);
+        }
+        if (command === 'last'){
+            helpers.currentDirectionsIndex = directionsList.length;
+            this.emit(':tell', directionsList[directionsList.length - 1]);
+        }
+
+        //what do we do when we reach the end of the directions dialogue????
+
+    },
+
+    'Unhandled': function() {
+        var msg = 'Sorry, I didn\'t get that. ';
+
+        if (helpers.currentRecipeItem){
+            msg = msg + 'Say ingredients to hear the ingredients for this recipe. Say start to begin making this recipe.';
+        } else {
+            msg = msg + 'Please say which recipe you would like to make.';
+        }
+
+        this.emit(':ask', msg, msg);
     }
 
- });
+ };
+
+// //handles the recipe dialogue
+//  var recipeModeHandlers = Alexa.CreateStateHandler(states.RECIPEDIALOGUE, {
+
+//     //this intent handles reading the entire list of ingredients, and then entering the directions dialogue
+//     'RecipeIntent': function(){
+//         var ingredients = this.attributes.currentRecipeItem.Ingredients;
+
+
+//         //enter directions dialogue after reading ingredients
+//         this.handler.state = states.DIRECTIONSDIALOGUE;
+//         this.emit(':tell', 'To make ' + currentRecipe + ', you will need these ingredients.' + ingredients);
+//     },
+ 
+//     //this intent handles stepping through the ingredients one by one
+//     'NextIngredientIntent': function(){
+//         var currentRecipe = this.attributes.currentRecipe;
+//         var currentIngIndex = this.attributes.currentIngredientIndex;
+//         var ingredientsList = [];
+//         var command = this.event.request.intent.slots.nextOrLast.value;
+
+//         var cb = function(result){
+//             var ingredients = result.Item.Ingredients.S;
+//             ingredientsList = ingredients.split('\n');
+//         };
+
+//         EntryService.prototype.read(currentRecipe, cb);
+
+//         if (command === 'next'){
+//             this.attributes.currentIngredientIndex = currentIngIndex + 1;
+//             this.emit(':tell', ingredientsList[currentIngIndex]);
+//         }
+//         if (command === 'last'){
+//             this.attributes.currentIngredientIndex = ingredientsList.length;
+//             this.emit(':tell', ingredientsList[ingredientsList.length - 1]);
+//         }
+
+//         //if we have reached the end of the ingredient list, enter the directions dialogue
+//         if (this.attributes.currentIngredientIndex === ingredientsList.length){
+//             this.handler.state = states.DIRECTIONSDIALOGUE;
+//         }
+
+//     },
+
+//     //this intent handles the start again function. Note that this intent has nearly the same behavior in the directions dialogue state
+//     'StartAgainIntent': function(){
+//         var currentRecipe = this.attributes.currentRecipe;
+//         var ingredientsList = [];
+
+//         var cb = function(result){
+//             var ingredients = result.Item.Ingredients.S;
+//             ingredientsList = ingredients.split('\n');
+//         };
+
+//         EntryService.prototype.read(currentRecipe, cb);
+
+//         this.attributes.currentIngredientIndex = 1;
+//         this.emit(':tell', ingredientsList[0]);
+
+//     },
+
+//     //handles quitting and returning to the main menu. This intent is also in the directions dialogue state
+//     'QuitIntent': function(){
+//         this.attributes.currentIngredientIndex = 0;
+//         this.attributes.currentDirectionsIndex = 0;
+//         this.attributes.currentRecipe = '';
+//         this.handler.state = states.MAINMENU;
+//     }
+
+//  });
 
 // // handles the directions dialogue
 //  var directionsHandlers = Alexa.CreateStateHandler(states.DIRECTIONSDIALOGUE, {
