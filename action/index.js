@@ -58,7 +58,7 @@ exports.handler = (event, context, callback) => {
 
         var alexa = Alexa.handler(event, context);
         // alexa.dynamoDBTableName = 'Recipes';
-        alexa.appid = 'amzn1.ask.skill.0f0b54a5-a07c-4af0-8644-783c640f7afb';
+        alexa.appId = 'amzn1.ask.skill.0f0b54a5-a07c-4af0-8644-783c640f7afb';
         alexa.registerHandlers(handlers);
             // , directionsHandlers);
         alexa.execute();
@@ -92,15 +92,15 @@ var helpers = {
                     if (item.RecipeName === name){
                         helpers.currentRecipeItem = item;
                         helpers.currentDialog = states.RECIPEDIALOGUE;
-                        alexasdk.emit(":tell", "Okay! I found a recipe for " + name + ".");
+                        alexasdk.emit(":ask", "Okay! I found a recipe for " + name + ".");
                     }
                 }
                 //no recipe found
-                alexasdk.emit(":tell", "I'm sorry. I don't know that recipe.", "Add a recipe for " + name + " or say a different recipe.");
+                alexasdk.emit(":ask", "I'm sorry. I don't know that recipe.", "Add a recipe for " + name + " or say a different recipe.");
 
             } else {
                 //no recipe table
-                alexasdk.emit(":tell", "You haven't added any recipes yet!", "Add some recipes to get started, then say a recipe you would like to make.");
+                alexasdk.emit(":ask", "You haven't added any recipes yet!", "Add some recipes to get started, then say a recipe you would like to make.");
             }
         };
 
@@ -114,16 +114,17 @@ var helpers = {
     'LaunchRequest': function() {
 
         helpers.currentDialog = states.MAINMENU;
+        console.log(this.response);
 
         this.emit(':ask', 'Recipe assistant here! What recipe would you like to make?', 'Please say which recipe you would like to make.');
 
     },
 
     'SessionEndedRequest': function(){
-        if (!(helpers.currentDialog === states.MAINMENU)){
-            this.emit('LaunchRequest');
-        }else{
-            this.succeed();
+        if (helpers.currentDialog === states.MAINMENU){
+            this.emit(':tell', 'Exiting recipe assistant. Thanks for cooking with me today!');
+        } else {
+            this.emit('QuitIntent');
         }
     },
 
@@ -132,19 +133,30 @@ var helpers = {
         var recipe = this.event.request.intent.slots.recipe.value;
 
 
+        // console.log(this);
+        // console.log(this.ShouldEndSession);
+        // console.log(this.response);
+        // console.log(this.response.ShouldEndSession);
+        // console.log(this.response.listen);
+
+
         helpers.read(recipe, this);
          
     },
 
     'RecipeIntent': function(){
-        console.log(helpers.currentRecipeItem);
 
-        var ingredients = helpers.currentRecipeItem.Ingredients;
+        var ingredientsList = helpers.currentRecipeItem.Ingredients.split('\n');
+        var response = '';
+
+        for (var i = 0; i<ingredientsList.length ; i++){
+            response += ingredientsList[i] + ". ";
+        }
 
 
         //enter directions dialogue after reading ingredients
         helpers.currentDialog = states.DIRECTIONSDIALOGUE;
-        this.emit(':tell', 'You will need these ingredients: ' + ingredients +'.');
+        this.emit(':ask', 'You will need these ingredients: ' + response);
     },
 
     'NextIngredientIntent': function(){
@@ -160,24 +172,21 @@ var helpers = {
             
             //check if this is the end of the list, enter recipe dialog
             if (helpers.currentIngredientIndex === ingredientsList.length){
-                console.log("made if");
+
+                helpers.currentIngredientIndex = 0;
                 helpers.currentDialog = states.DIRECTIONSDIALOGUE;
             };
 
-            this.emit(':tell', ingredientsList[currentIngIndex]);
+            this.emit(':ask', ingredientsList[currentIngIndex]);
             
             
-        }
-
-        //if we have reached the end of the ingredient list, enter the directions dialogue
-        if (command === 'last'){
-            helpers.currentIngredientIndex = ingredientsList.length;
+        } else {
+            //command is last. read the last ingredient and enter directions dialog
+            helpers.currentIngredientIndex = 0;
             helpers.currentDialog = states.DIRECTIONSDIALOGUE;
-            this.emit(':tell', ingredientsList[ingredientsList.length - 1]);
-            //check if this is the end of the list, enter recipe dialog
-        }
 
-        
+            this.emit(':ask', ingredientsList[ingredientsList.length - 1] );
+        }
 
 
     },
@@ -186,18 +195,18 @@ var helpers = {
         if (helpers.currentDialog === states.RECIPEDIALOGUE) {
             var ingredientsList = helpers.currentRecipeItem.Ingredients.split('\n');
             helpers.currentIngredientIndex = 1;
-            this.emit(':tell', ingredientsList[0]);
+            this.emit(':ask', ingredientsList[0]);
         } else {
         //start again from directions dialog – extend this logic to start again in different states
             var directionsList = helpers.currentRecipeItem.Directions.split('\n');
             helpers.currentDirectionsIndex = 1;
-            this.emit(':tell', directionsList[0]);
+            this.emit(':ask', directionsList[0]);
 
         }
     },
 
     'WhatCanISayIntent': function(){
-        this.emit(':tell', "Say I'd like to make, and then the name of a recipe. Or, say find, and then the name of a recipe.");
+        this.emit(':ask', "Say I'd like to make, and then the name of a recipe. Or, say find, and then the name of a recipe.");
     },
 
     //handles quitting and returning to the main menu. This intent is also in the directions dialogue state
@@ -211,9 +220,18 @@ var helpers = {
 
     'readDirectionsIntent': function(){
 
-        var directions = helpers.currentRecipeItem.Directions;
+        //if you ask for the directions and we are not in the directions dialogue, enter the directions dialog
+        helpers.currentDialog = states.DIRECTIONSDIALOGUE;
+        
 
-        this.emit(':tell', directions);
+        var directionsList = helpers.currentRecipeItem.Directions.split('\n');
+        var response = '';
+
+        for (var i = 0; i<directionsList.length ; i++){
+            response += directionsList[i] + ". ";
+        }
+
+        this.emit(':ask', response);
     },
 
     'NextDirectionIntent': function(){
@@ -224,16 +242,29 @@ var helpers = {
         
         if (command === 'next'){
             helpers.currentDirectionsIndex = currentDirIndex + 1;
-            this.emit(':tell', directionsList[currentDirIndex]);
-        }
-        if (command === 'last'){
-            helpers.currentDirectionsIndex = directionsList.length;
-            this.emit(':tell', directionsList[directionsList.length - 1]);
+            this.emit(':ask', directionsList[currentDirIndex]);
+        } else {
+            //command is last
+            helpers.currentDirectionsIndex = 0;
+            this.emit(':ask', directionsList[directionsList.length - 1]);
         }
 
         //what do we do when we reach the end of the directions dialogue????
 
     },
+
+    // 'AMAZON.StopIntent': function(){
+    //     if (!(helpers.currentDialog === states.MAINMENU)){
+    //         helpers.currentIngredientIndex = 0;
+    //         helpers.currentDirectionsIndex = 0;
+    //         helpers.currentRecipeItem = null;
+    //         helpers.currentDialog = states.MAINMENU;
+
+    //         this.emit(':ask', "What recipe would you like to make?", 'Please say which recipe you would like to make.');
+    //     }else{
+    //         this.succeed();
+    //     }
+    // },
 
     'Unhandled': function() {
         var msg = 'Sorry, I didn\'t get that. ';

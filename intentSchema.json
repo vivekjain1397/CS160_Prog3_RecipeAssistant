@@ -16,6 +16,9 @@
       "intent": "QuitIntent"
     },
     {
+      "intent": "SessionEndedRequest"
+    },
+    {
       "intent": "WhatCanISayIntent"
     },
     {
