@@ -3,8 +3,14 @@ MakeIntent find {bacon and eggs|recipe}
 MakeIntent i'd like to make {lemonade |recipe}
 MakeIntent find {lemonade |recipe}
 MakeIntent {lemonade |recipe}
+MakeIntent find {spaghetti |recipe}
+MakeIntent find {pasta |recipe}
+MakeIntent find {avocado |recipe}
+MakeIntent find {popcorn |recipe}
 RecipeIntent ingredients
 RecipeIntent what are the ingredients
+AMAZON.HelpIntent help
+AMAZON.HelpIntent i need help
 QuitIntent main menu
 QuitIntent return
 QuitIntent exit recipe
@@ -15,5 +21,3 @@ NextDirectionIntent {command} step
 StartAgainIntent start again
 readDirectionsIntent start
 readDirectionsIntent read recipe
-AMAZON.HelpIntent help
-AMAZON.HelpIntent i need help

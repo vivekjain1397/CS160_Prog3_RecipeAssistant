@@ -29,26 +29,38 @@ exports.handler = (event, context, callback) => {
 
     //handles http requests ir this is an http request
     if (event.httpMethod){
+
         const done = (err, res) => callback(null, {
-            statusCode: err ? '400' : '200',
-            body: err ? err.message : JSON.stringify(res),
-            headers: {
-                'Content-Type': 'application/json',
+        statusCode: err ? '400' : '200',
+        body: err ? err.message : JSON.stringify(res),
+        headers: {
+            'Access-Control-Allow-Headers': 'x-Requested-With',
+            'Access-Control-Allow-Origin': '*',
+            "Access-Control-Allow-Credentials" : true,
+            'Content-Type': 'application/json',
             },
         });
 
         switch (event.httpMethod) {
-            case 'DELETE':
-                dynamo.deleteItem(JSON.parse(event.body), done);
-                break;
             case 'GET':
                 dynamo.scan({ TableName: event.queryStringParameters.TableName }, done);
                 break;
             case 'POST':
-                dynamo.putItem(JSON.parse(event.body), done);
-                break;
-            case 'PUT':
-                dynamo.updateItem(JSON.parse(event.body), done);
+                var json = JSON.parse(event.body);
+                if (json["type"] == 'POST') {
+                    dynamo.putItem(json["data"], done);
+                }
+                else if (json["type"] == 'PUT') {
+                    dynamo.updateItem(json["data"], done);
+                }
+                else if (json["type"] == 'DELETE') {
+                    dynamo.deleteItem(json["data"], done);
+                }
+                else if (json["type"] == 'QUERY') {
+                    dynamo.scan(json["data"], done);
+                } else{
+                    done(new Error(`Unsupported method "${json["type"]}"`))
+                }
                 break;
             default:
                 done(new Error(`Unsupported method "${event.httpMethod}"`));
@@ -129,6 +141,8 @@ var helpers = {
 
         var recipe = this.event.request.intent.slots.recipe.value;
 
+        console.log(recipe);
+
 
         helpers.read(recipe, this);
          
@@ -140,17 +154,7 @@ var helpers = {
             this.emit(':ask', "You haven\'t told me which recipe you want to make!", "Please say the name of a recipe you would like to make.");
         }
 
-        var ingredientsList = helpers.currentRecipeItem.Ingredients.split('\n');
-        var response = '';
-
-        for (var i = 0; i<ingredientsList.length ; i++){
-            response += ingredientsList[i] + ". ";
-        }
-
-
-        //enter directions dialogue after reading ingredients
-        helpers.currentDialog = states.DIRECTIONSDIALOGUE;
-        this.emit(':ask', 'You will need these ingredients: ' + response);
+        this.emit('StartAgainIntent');
     },
 
     'NextIngredientIntent': function(){
@@ -164,21 +168,23 @@ var helpers = {
         var command = this.event.request.intent.slots.nextOrLast.value;
 
         if (command === 'next'){
-            helpers.currentIngredientIndex = currentIngIndex + 1;
             
             //check if this is the end of the list, enter recipe dialog
             if (helpers.currentIngredientIndex === ingredientsList.length){
 
                 helpers.currentIngredientIndex = 0;
                 helpers.currentDialog = states.DIRECTIONSDIALOGUE;
+                this.emit(':ask', "That\'s all of the ingredients. Say, read recipe, to begin listing recipe directions, or, quit recipe, to return to the main menu.");
             };
+
+            helpers.currentIngredientIndex = currentIngIndex + 1;
 
             this.emit(':ask', ingredientsList[currentIngIndex]);
             
             
         } else {
             //command is last. read the last ingredient and enter directions dialog
-            helpers.currentIngredientIndex = 0;
+            helpers.currentIngredientIndex = ingredientsList.length;
             helpers.currentDialog = states.DIRECTIONSDIALOGUE;
 
             this.emit(':ask', ingredientsList[ingredientsList.length - 1] );
@@ -239,16 +245,8 @@ var helpers = {
 
         //if you ask for the directions and we are not in the directions dialogue, enter the directions dialog
         helpers.currentDialog = states.DIRECTIONSDIALOGUE;
-        
 
-        var directionsList = helpers.currentRecipeItem.Directions.split('\n');
-        var response = '';
-
-        for (var i = 0; i<directionsList.length ; i++){
-            response += directionsList[i] + ". ";
-        }
-
-        this.emit(':ask', response);
+        this.emit('StartAgainIntent');
     },
 
     'NextDirectionIntent': function(){
@@ -265,11 +263,18 @@ var helpers = {
         var command = this.event.request.intent.slots.command.value;
         
         if (command === 'next'){
+
+            if (helpers.currentDirectionsIndex === directionsList.length){
+                helpers.currentDirectionsIndex = 0;
+                this.emit(':ask', 'That\'s the last step in the recipe! Say, start again, to read the directions again, or, quit recipe, to return to the main menu.');
+            }
+
             helpers.currentDirectionsIndex = currentDirIndex + 1;
             this.emit(':ask', directionsList[currentDirIndex]);
+
         } else {
             //command is last
-            helpers.currentDirectionsIndex = 0;
+            helpers.currentDirectionsIndex = directionsList.length;
             this.emit(':ask', directionsList[directionsList.length - 1]);
         }
 
