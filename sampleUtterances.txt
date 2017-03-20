@@ -2,15 +2,18 @@ MakeIntent i'd like to make {bacon and eggs |recipe}
 MakeIntent find {bacon and eggs|recipe}
 MakeIntent i'd like to make {lemonade |recipe}
 MakeIntent find {lemonade |recipe}
-
+MakeIntent {lemonade |recipe}
 RecipeIntent ingredients
 RecipeIntent what are the ingredients
 QuitIntent main menu
-QuitIntent quit
-QuitIntent exit
+QuitIntent return
+QuitIntent exit recipe
+QuitIntent quit recipe
 WhatCanISayIntent what can i say
 NextIngredientIntent {nextOrLast} ingredient
 NextDirectionIntent {command} step
 StartAgainIntent start again
 readDirectionsIntent start
 readDirectionsIntent read recipe
+AMAZON.HelpIntent help
+AMAZON.HelpIntent i need help

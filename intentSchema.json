@@ -13,10 +13,10 @@
       "intent": "RecipeIntent"
     },
     {
-      "intent": "QuitIntent"
+      "intent": "AMAZON.HelpIntent"
     },
     {
-      "intent": "SessionEndedRequest"
+      "intent": "QuitIntent"
     },
     {
       "intent": "WhatCanISayIntent"
