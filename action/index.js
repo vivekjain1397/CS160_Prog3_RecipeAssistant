@@ -114,19 +114,11 @@ var helpers = {
     'LaunchRequest': function() {
 
         helpers.currentDialog = states.MAINMENU;
-        console.log(this.response);
-
+    
         this.emit(':ask', 'Recipe assistant here! What recipe would you like to make?', 'Please say which recipe you would like to make.');
 
     },
 
-    'SessionEndedRequest': function(){
-        if (helpers.currentDialog === states.MAINMENU){
-            this.emit(':tell', 'Exiting recipe assistant. Thanks for cooking with me today!');
-        } else {
-            this.emit('QuitIntent');
-        }
-    },
 
     'MakeIntent': function () {
 
@@ -211,11 +203,14 @@ var helpers = {
 
     //handles quitting and returning to the main menu. This intent is also in the directions dialogue state
     'QuitIntent': function(){
+
+        helpers.currentDirectionsIndex = 0;
         helpers.currentIngredientIndex = 0;
         helpers.currentRecipeItem = null;
         helpers.currentDialog = states.MAINMENU;
 
-        this.emit(':ask', "What recipe would you like to make?", 'Please say which recipe you would like to make.');
+
+        this.emit(':ask', "Which recipe would you like to make?");
     },
 
     'readDirectionsIntent': function(){
